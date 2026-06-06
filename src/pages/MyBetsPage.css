@@ -1,0 +1,27 @@
+.bet-item {
+  margin: 0 16px 10px;
+  background: var(--c-surface);
+  border: 0.5px solid var(--c-border2);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+.bet-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.bet-pick { font-size: 14px; font-weight: 700; }
+.bet-matchup { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
+.bet-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--c-border);
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.bet-detail { font-size: 12px; color: var(--c-muted); }
+.bet-detail strong { color: var(--c-text); }
+.bet-result { font-size: 13px; font-weight: 700; }

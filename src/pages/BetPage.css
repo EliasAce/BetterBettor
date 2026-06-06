@@ -1,0 +1,212 @@
+/* ── Sport filter nav ────────────────────────── */
+.sport-nav {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  border-bottom: 0.5px solid var(--c-border);
+}
+.sport-nav::-webkit-scrollbar { display: none; }
+
+.sport-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--c-surface2);
+  border: 0.5px solid var(--c-border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  min-width: 54px;
+}
+.sport-btn:hover {
+  border-color: var(--c-border2);
+  background: rgba(255,255,255,0.05);
+}
+.sport-btn.active {
+  background: rgba(59,130,246,0.15);
+  border-color: var(--c-accent);
+}
+.sport-icon { font-size: 18px; }
+.sport-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--c-muted);
+}
+.sport-btn.active .sport-label { color: var(--c-accent2); }
+
+/* ── Game cards ──────────────────────────────── */
+.game-card {
+  margin: 0 16px 10px;
+  background: var(--c-surface);
+  border: 0.5px solid var(--c-border2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.game-card.selected { border-color: var(--c-accent); background: rgba(59,130,246,0.04); }
+
+.game-header {
+  padding: 7px 14px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 0.5px solid var(--c-border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--c-muted);
+}
+.game-league { font-weight: 700; }
+.game-live { color: var(--c-red); font-weight: 700; display: flex; align-items: center; gap: 4px; }
+.live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--c-red);
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+.game-body { padding: 12px 14px; }
+.matchup { display: flex; align-items: center; justify-content: space-between; }
+.team { flex: 1; }
+.team.right { text-align: right; }
+.team-name { font-size: 14px; font-weight: 700; }
+.team-record { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
+.vs { color: var(--c-muted); font-size: 12px; padding: 0 10px; flex-shrink: 0; }
+
+.game-odds { display: flex; gap: 6px; margin-top: 10px; }
+.odd-btn {
+  flex: 1;
+  background: var(--c-surface2);
+  border: 0.5px solid var(--c-border);
+  border-radius: 8px;
+  padding: 8px 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: Georgia, serif;
+}
+.odd-btn:hover, .odd-btn.sel {
+  background: rgba(59,130,246,0.12);
+  border-color: var(--c-accent);
+}
+.odd-type { font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--c-muted); margin-bottom: 3px; }
+.odd-val  { font-size: 13px; font-weight: 700; color: var(--c-text); }
+.odd-team { font-size: 10px; color: var(--c-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Bet slip ─────────────────────────────────── */
+.bet-slip {
+  margin: 12px 16px 0;
+  background: var(--c-surface);
+  border: 0.5px solid var(--c-border2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.slip-header {
+  padding: 11px 16px;
+  background: rgba(59,130,246,0.08);
+  border-bottom: 0.5px solid var(--c-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.slip-title { font-size: 13px; font-weight: 700; color: var(--c-accent2); }
+.slip-clear { font-size: 11px; color: var(--c-muted); cursor: pointer; background: none; border: none; font-family: Georgia, serif; }
+.slip-pick { padding: 10px 16px; border-bottom: 0.5px solid var(--c-border); }
+.slip-matchup { font-size: 11px; color: var(--c-muted); margin-bottom: 2px; }
+.slip-pick-name { font-size: 14px; font-weight: 600; }
+.slip-odds { font-size: 12px; color: var(--c-accent2); margin-top: 3px; }
+
+.wager-section { padding: 14px 16px; }
+.wager-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--c-muted); margin-bottom: 8px; }
+.wager-input-wrap { position: relative; }
+.wager-dollar { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--c-muted); font-weight: 700; }
+.wager-input {
+  padding-left: 28px !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  height: 52px;
+}
+.quick-amounts { display: flex; gap: 6px; margin-top: 10px; }
+.qa-btn {
+  background: var(--c-surface2);
+  border: 0.5px solid var(--c-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-muted);
+  cursor: pointer;
+  font-family: Georgia, serif;
+  transition: all 0.15s;
+}
+.qa-btn:hover { color: var(--c-text); border-color: var(--c-border2); }
+
+.payout-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(16,185,129,0.05);
+  border-top: 0.5px solid var(--c-border);
+}
+.payout-label { font-size: 12px; color: var(--c-muted); }
+.payout-val { font-size: 15px; font-weight: 700; color: var(--c-green); }
+.slip-footer { padding: 12px 16px; }
+
+/* ── Modal ───────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-sheet {
+  background: var(--c-surface);
+  border-radius: 16px 16px 0 0;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 420px;
+  border: 0.5px solid var(--c-border2);
+}
+.modal-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.modal-sub { font-size: 13px; color: var(--c-muted); margin-bottom: 20px; line-height: 1.6; }
+.modal-sub strong { color: var(--c-text); }
+.modal-actions { display: flex; gap: 10px; }
+.modal-cancel {
+  flex: 1;
+  background: var(--c-surface2);
+  border: 0.5px solid var(--c-border);
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14px;
+  color: var(--c-muted);
+  cursor: pointer;
+  font-family: Georgia, serif;
+}
+.modal-confirm {
+  flex: 2;
+  background: var(--c-accent);
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  transition: background 0.15s;
+}
+.modal-confirm:hover { background: #2563eb; }
+.modal-confirm:disabled { background: var(--c-surface2); color: var(--c-muted); }
