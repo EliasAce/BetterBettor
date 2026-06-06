@@ -7,7 +7,7 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="logo">Better Bettor<span></span></div>
+      <img src="/logo.png" alt="BetterBettor" className="header-logo" />
       <button className="avatar" onClick={signOut} title="Sign out">
         {getInitials(profile?.username ?? '?')}
       </button>

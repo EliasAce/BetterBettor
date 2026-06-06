@@ -31,3 +31,10 @@
   border: none;
   font-family: Georgia, serif;
 }
+
+
+.header-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}

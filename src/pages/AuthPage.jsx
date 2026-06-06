@@ -26,8 +26,8 @@ export default function AuthPage() {
 
   return (
     <div className="auth-page">
-      <div className="auth-logo">Chalk<span>.</span></div>
-      <p className="auth-tagline">Compete with friends. Virtual bankroll. Real bragging rights.</p>
+    <img src="/logo.png" alt="BetterBettor" className="auth-logo-img" />
+    <p className="auth-tagline">Compete with friends. Virtual bankroll. Real bragging rights.</p>
 
       <div className="auth-form">
         {mode === 'signup' && (
