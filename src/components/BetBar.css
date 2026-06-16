@@ -1,0 +1,216 @@
+/* ── Persistent bar ──────────────────────────── */
+.bet-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--c-accent);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.bet-bar:hover { background: #2563eb; }
+.bet-bar:active { background: #1d4ed8; }
+
+.bet-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bet-bar-icon { font-size: 18px; }
+.bet-bar-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+.bet-bar-odds {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 1px;
+}
+
+.bet-bar-right { text-align: right; flex-shrink: 0; }
+.bet-bar-count { font-size: 11px; color: rgba(255,255,255,0.7); }
+.bet-bar-cta {
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  margin-top: 1px;
+}
+
+/* ── Bottom sheet overlay ────────────────────── */
+.betbar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.betbar-sheet {
+  background: var(--c-surface);
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  max-width: 420px;
+  border: 0.5px solid var(--c-border2);
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--c-border2);
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px 10px;
+  border-bottom: 0.5px solid var(--c-border);
+}
+.sheet-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.sheet-close {
+  background: none;
+  border: none;
+  color: var(--c-muted);
+  font-size: 14px;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  padding: 4px 8px;
+}
+
+/* ── Picks in sheet ──────────────────────────── */
+.sheet-pick {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid var(--c-border);
+}
+.sheet-pick-left { flex: 1; }
+.sheet-pick-matchup { font-size: 11px; color: var(--c-muted); margin-bottom: 2px; }
+.sheet-pick-name { font-size: 14px; font-weight: 600; }
+.sheet-pick-odds { font-size: 12px; color: var(--c-accent2); margin-top: 3px; }
+.sheet-pick-remove {
+  background: none;
+  border: none;
+  color: var(--c-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-left: 8px;
+  font-family: Georgia, serif;
+}
+.sheet-pick-remove:hover { color: var(--c-red); }
+
+/* ── Combined odds ───────────────────────────── */
+.sheet-combined {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(139,92,246,0.08);
+  border-bottom: 0.5px solid var(--c-border);
+}
+.sheet-combined-label { font-size: 12px; color: var(--c-muted); }
+.sheet-combined-val { font-size: 15px; font-weight: 700; color: var(--c-purple); }
+
+/* ── Wager section ───────────────────────────── */
+.sheet-wager { padding: 14px 16px; }
+.sheet-wager-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--c-muted);
+  margin-bottom: 8px;
+}
+.sheet-wager-input-wrap { position: relative; }
+.sheet-wager-dollar {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--c-muted);
+  font-weight: 700;
+}
+.sheet-wager-input {
+  padding-left: 28px !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  height: 52px;
+}
+.sheet-quick-amounts { display: flex; gap: 6px; margin-top: 10px; }
+.sheet-qa-btn {
+  background: var(--c-surface2);
+  border: 0.5px solid var(--c-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-muted);
+  cursor: pointer;
+  font-family: Georgia, serif;
+  transition: all 0.15s;
+  flex: 1;
+}
+.sheet-qa-btn:hover { color: var(--c-text); border-color: var(--c-border2); }
+
+/* ── Payout ──────────────────────────────────── */
+.sheet-payout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(16,185,129,0.05);
+  border-top: 0.5px solid var(--c-border);
+}
+.sheet-payout-label { font-size: 12px; color: var(--c-muted); }
+.sheet-payout-val { font-size: 16px; font-weight: 700; color: var(--c-green); }
+
+/* ── Actions ─────────────────────────────────── */
+.sheet-actions {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px 0;
+}
+.sheet-clear {
+  flex: 1;
+  background: var(--c-surface2);
+  border: 0.5px solid var(--c-border);
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 13px;
+  color: var(--c-muted);
+  cursor: pointer;
+  font-family: Georgia, serif;
+}
+.sheet-place {
+  flex: 2;
+  background: var(--c-accent);
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  transition: background 0.15s;
+}
+.sheet-place:hover { background: #2563eb; }
+.sheet-place:disabled { background: var(--c-surface2); color: var(--c-muted); }
