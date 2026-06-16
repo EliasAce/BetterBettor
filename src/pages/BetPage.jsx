@@ -14,12 +14,30 @@ const SPORTS = [
   { key: 'UFC',  label: 'UFC',  icon: '🥊' },
 ]
 
+const MAX_LEGS = 5
+
+function toDecimal(american) {
+  if (american > 0) return (american / 100) + 1
+  return (100 / Math.abs(american)) + 1
+}
+
+function calcParlayPayout(wager, oddsArray) {
+  const combined = oddsArray.reduce((acc, odds) => acc * toDecimal(odds), 1)
+  return wager * combined
+}
+
+function combinedAmericanOdds(oddsArray) {
+  const combined = oddsArray.reduce((acc, odds) => acc * toDecimal(odds), 1)
+  if (combined >= 2) return Math.round((combined - 1) * 100)
+  return Math.round(-100 / (combined - 1))
+}
+
 export default function BetPage() {
   const { profile } = useAuth()
   const toast = useToast()
   const [games, setGames] = useState([])
   const [activeSport, setActiveSport] = useState('ALL')
-  const [selected, setSelected] = useState(null)
+  const [picks, setPicks] = useState([])
   const [wager, setWager] = useState(50)
   const [confirming, setConfirming] = useState(false)
   const [placing, setPlacing] = useState(false)
@@ -33,7 +51,6 @@ export default function BetPage() {
       .neq('status', 'final')
       .order('is_live', { ascending: false })
       .then(({ data }) => setGames(data ?? []))
-
     if (profile) loadMembership()
   }, [profile])
 
@@ -51,36 +68,80 @@ export default function BetPage() {
     ? games
     : games.filter(g => g.league === activeSport)
 
-  const payout = calcPayout(wager, selected?.odds ?? -110)
+  const isParlay = picks.length > 1
+  const payout = isParlay
+    ? calcParlayPayout(wager, picks.map(p => p.odds))
+    : picks.length === 1
+    ? calcPayout(wager, picks[0].odds)
+    : 0
 
-  function selectPick(game, betType, label, odds) {
-    if (selected?.game.id === game.id && selected?.betType === betType) {
-      setSelected(null)
-    } else {
-      setSelected({ game, betType, label, odds })
+  const parlayOdds = isParlay ? combinedAmericanOdds(picks.map(p => p.odds)) : null
+
+  function togglePick(game, betType, label, odds) {
+    const existing = picks.findIndex(p => p.game.id === game.id && p.betType === betType)
+    if (existing >= 0) {
+      setPicks(picks.filter((_, i) => i !== existing))
+      return
     }
+    const sameGame = picks.findIndex(p => p.game.id === game.id)
+    if (sameGame >= 0) {
+      const updated = [...picks]
+      updated[sameGame] = { game, betType, label, odds }
+      setPicks(updated)
+      return
+    }
+    if (picks.length >= MAX_LEGS) {
+      toast(`Max ${MAX_LEGS} legs per parlay`, 'error')
+      return
+    }
+    setPicks([...picks, { game, betType, label, odds }])
+  }
+
+  function isSelected(gameId, betType) {
+    return picks.some(p => p.game.id === gameId && p.betType === betType)
+  }
+
+  function removePick(index) {
+    setPicks(picks.filter((_, i) => i !== index))
   }
 
   async function placeBet() {
-    if (!selected) return
+    if (picks.length === 0) return
     if (wager < 1) { toast('Enter a valid wager', 'error'); return }
     if (wager > myBalance) { toast('Insufficient bankroll!', 'error'); return }
     if (!myLeagueId) { toast('Join a league first!', 'error'); return }
     setPlacing(true)
 
-    const { error } = await supabase.from('bets').insert({
+    const betData = {
       user_id: profile.id,
       league_id: myLeagueId,
-      game_id: selected.game.id,
-      pick_label: selected.label,
-      bet_type: selected.betType,
-      odds: selected.odds,
+      game_id: picks[0].game.id,
+      pick_label: isParlay ? `${picks.length}-leg parlay` : picks[0].label,
+      bet_type: isParlay ? 'parlay' : picks[0].betType,
+      odds: isParlay ? parlayOdds : picks[0].odds,
       wager,
       potential_payout: payout,
       status: 'active',
-    })
+    }
+
+    const { data: newBet, error } = await supabase
+      .from('bets')
+      .insert(betData)
+      .select()
+      .single()
 
     if (error) { toast(error.message, 'error'); setPlacing(false); return }
+
+    if (isParlay) {
+      const parlayLegs = picks.map(p => ({
+        bet_id: newBet.id,
+        game_id: p.game.id,
+        pick_label: p.label,
+        bet_type: p.betType,
+        odds: p.odds,
+      }))
+      await supabase.from('parlay_picks').insert(parlayLegs)
+    }
 
     await supabase
       .from('league_members')
@@ -89,22 +150,23 @@ export default function BetPage() {
       .eq('league_id', myLeagueId)
 
     setMyBalance(b => b - wager)
-    toast(`Bet placed! ${fmtMoney(wager)} on ${selected.label}`)
-    setSelected(null)
+    toast(isParlay
+      ? `${picks.length}-leg parlay placed! Potential: ${fmtMoney(payout)}`
+      : `Bet placed! ${fmtMoney(wager)} on ${picks[0].label}`
+    )
+    setPicks([])
     setConfirming(false)
     setPlacing(false)
   }
 
   return (
     <div className="screen-content">
-
-      {/* Sport filter nav */}
       <div className="sport-nav">
         {SPORTS.map(s => (
           <button
             key={s.key}
             className={`sport-btn${activeSport === s.key ? ' active' : ''}`}
-            onClick={() => { setActiveSport(s.key); setSelected(null) }}
+            onClick={() => setActiveSport(s.key)}
           >
             <span className="sport-icon">{s.icon}</span>
             <span className="sport-label">{s.label}</span>
@@ -112,19 +174,15 @@ export default function BetPage() {
         ))}
       </div>
 
-      {/* Games count */}
       <div className="section-hd">
         {filteredGames.length} {activeSport === 'ALL' ? 'Games' : activeSport + ' Games'} Available
       </div>
 
       {filteredGames.length === 0 ? (
-        <div className="empty-state">
-          No {activeSport === 'ALL' ? '' : activeSport + ' '}games available right now.<br />
-          Check back soon or try another sport.
-        </div>
+        <div className="empty-state">No games available right now.</div>
       ) : (
         filteredGames.map(g => (
-          <div key={g.id} className={`game-card${selected?.game.id === g.id ? ' selected' : ''}`}>
+          <div key={g.id} className={`game-card${picks.some(p => p.game.id === g.id) ? ' selected' : ''}`}>
             <div className="game-header">
               <span className="game-league">{g.league}</span>
               {g.is_live
@@ -145,24 +203,24 @@ export default function BetPage() {
               </div>
               <div className="game-odds">
                 <button
-                  className={`odd-btn${selected?.game.id === g.id && selected.betType === 'ml_away' ? ' sel' : ''}`}
-                  onClick={() => selectPick(g, 'ml_away', `${g.away_team} ML`, g.ml_away)}
+                  className={`odd-btn${isSelected(g.id, 'ml_away') ? ' sel' : ''}`}
+                  onClick={() => togglePick(g, 'ml_away', `${g.away_team} ML`, g.ml_away)}
                 >
                   <div className="odd-type">Moneyline</div>
                   <div className="odd-val">{fmtOdds(g.ml_away)}</div>
                   <div className="odd-team">{g.away_team.split(' ').pop()}</div>
                 </button>
                 <button
-                  className={`odd-btn${selected?.game.id === g.id && selected.betType === 'spread_away' ? ' sel' : ''}`}
-                  onClick={() => selectPick(g, 'spread_away', `${g.away_team} ${g.spread_away > 0 ? '+' : ''}${g.spread_away}`, -108)}
+                  className={`odd-btn${isSelected(g.id, 'spread_away') ? ' sel' : ''}`}
+                  onClick={() => togglePick(g, 'spread_away', `${g.away_team} ${g.spread_away > 0 ? '+' : ''}${g.spread_away}`, -108)}
                 >
                   <div className="odd-type">Spread</div>
                   <div className="odd-val">{g.spread_away > 0 ? '+' : ''}{g.spread_away}</div>
                   <div className="odd-team">{g.away_team.split(' ').pop()}</div>
                 </button>
                 <button
-                  className={`odd-btn${selected?.game.id === g.id && selected.betType === 'ml_home' ? ' sel' : ''}`}
-                  onClick={() => selectPick(g, 'ml_home', `${g.home_team} ML`, g.ml_home)}
+                  className={`odd-btn${isSelected(g.id, 'ml_home') ? ' sel' : ''}`}
+                  onClick={() => togglePick(g, 'ml_home', `${g.home_team} ML`, g.ml_home)}
                 >
                   <div className="odd-type">Moneyline</div>
                   <div className="odd-val">{fmtOdds(g.ml_home)}</div>
@@ -174,18 +232,41 @@ export default function BetPage() {
         ))
       )}
 
-      {/* Bet slip */}
-      {selected && (
+      {picks.length > 0 && (
         <div className="bet-slip">
           <div className="slip-header">
-            <span className="slip-title">Bet Slip</span>
-            <button className="slip-clear" onClick={() => setSelected(null)}>Clear</button>
+            <span className="slip-title">
+              {isParlay ? `🔗 Parlay — ${picks.length} Legs` : 'Bet Slip'}
+            </span>
+            <button className="slip-clear" onClick={() => setPicks([])}>Clear</button>
           </div>
-          <div className="slip-pick">
-            <div className="slip-matchup">{selected.game.away_team} @ {selected.game.home_team}</div>
-            <div className="slip-pick-name">{selected.label}</div>
-            <div className="slip-odds">{fmtOdds(selected.odds)}</div>
-          </div>
+
+          {picks.map((p, i) => (
+            <div key={i} className="slip-pick">
+              <div className="slip-pick-left">
+                <div className="slip-matchup">{p.game.away_team} @ {p.game.home_team}</div>
+                <div className="slip-pick-name">{p.label}</div>
+                <div className="slip-odds">{fmtOdds(p.odds)}</div>
+              </div>
+              <button className="slip-remove" onClick={() => removePick(i)}>✕</button>
+            </div>
+          ))}
+
+          {isParlay && (
+            <div className="parlay-odds-row">
+              <span className="parlay-odds-label">Combined Odds</span>
+              <span className="parlay-odds-val">{fmtOdds(parlayOdds)}</span>
+            </div>
+          )}
+
+          {picks.length < MAX_LEGS && (
+            <div className="parlay-hint">
+              {isParlay
+                ? `Add up to ${MAX_LEGS - picks.length} more leg${MAX_LEGS - picks.length !== 1 ? 's' : ''}`
+                : 'Select another game to build a parlay'}
+            </div>
+          )}
+
           <div className="wager-section">
             <div className="wager-label">Wager Amount</div>
             <div className="wager-input-wrap">
@@ -210,24 +291,37 @@ export default function BetPage() {
             <span className="payout-val">{fmtMoney(payout)}</span>
           </div>
           <div className="slip-footer">
-            <button className="btn-primary" onClick={() => setConfirming(true)}>Place Bet</button>
+            <button className="btn-primary" onClick={() => setConfirming(true)}>
+              {isParlay ? `Place ${picks.length}-Leg Parlay` : 'Place Bet'}
+            </button>
           </div>
         </div>
       )}
 
-      {/* Confirm modal */}
       {confirming && (
         <div className="modal-overlay" onClick={() => setConfirming(false)}>
           <div className="modal-sheet" onClick={e => e.stopPropagation()}>
-            <div className="modal-title">Confirm Your Bet</div>
+            <div className="modal-title">
+              {isParlay ? `Confirm ${picks.length}-Leg Parlay` : 'Confirm Your Bet'}
+            </div>
             <div className="modal-sub">
-              Place {fmtMoney(wager)} on <strong>{selected?.label}</strong> ({fmtOdds(selected?.odds)}).
-              Potential payout: <strong>{fmtMoney(payout)}</strong>
+              {isParlay ? (
+                <>
+                  {picks.map((p, i) => (
+                    <div key={i} style={{ marginBottom: 4 }}>• {p.label} ({fmtOdds(p.odds)})</div>
+                  ))}
+                  <div style={{ marginTop: 10 }}>
+                    Wager: <strong>{fmtMoney(wager)}</strong> · Potential: <strong>{fmtMoney(payout)}</strong>
+                  </div>
+                </>
+              ) : (
+                <>Place {fmtMoney(wager)} on <strong>{picks[0]?.label}</strong> ({fmtOdds(picks[0]?.odds)}). Potential payout: <strong>{fmtMoney(payout)}</strong></>
+              )}
             </div>
             <div className="modal-actions">
               <button className="modal-cancel" onClick={() => setConfirming(false)}>Cancel</button>
               <button className="modal-confirm" onClick={placeBet} disabled={placing}>
-                {placing ? 'Placing…' : 'Confirm Bet'}
+                {placing ? 'Placing…' : 'Confirm'}
               </button>
             </div>
           </div>
