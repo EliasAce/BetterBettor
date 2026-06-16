@@ -52,13 +52,3 @@ export default function App() {
 }
 
 
-<Route path="/bet" element={
-  <BetPage
-    picks={picks}
-    onPicksChange={setPicks}
-    myBalance={myBalance}
-    myLeagueId={myLeagueId}
-    onBalanceChange={setMyBalance}
-    onLeagueLoad={(id, bal) => { setMyLeagueId(id); setMyBalance(bal) }}
-  />}
-/>
