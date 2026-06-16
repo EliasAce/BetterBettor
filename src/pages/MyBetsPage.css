@@ -25,3 +25,28 @@
 .bet-detail { font-size: 12px; color: var(--c-muted); }
 .bet-detail strong { color: var(--c-text); }
 .bet-result { font-size: 13px; font-weight: 700; }
+
+
+/* ── Parlay legs ─────────────────────────────── */
+.parlay-legs {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.parlay-leg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--c-muted);
+}
+.parlay-leg::before {
+  content: '·';
+  color: var(--c-accent);
+}
+.parlay-leg-pick { color: var(--c-text); }
+.parlay-leg-odds { color: var(--c-accent2); }
+.parlay-leg-result { font-weight: 700; }
+.parlay-leg-result.won { color: var(--c-green); }
+.parlay-leg-result.lost { color: var(--c-red); }
