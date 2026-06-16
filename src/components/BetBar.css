@@ -8,7 +8,11 @@
   cursor: pointer;
   transition: background 0.15s;
   flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 49;
 }
+
 .bet-bar:hover { background: #2563eb; }
 .bet-bar:active { background: #1d4ed8; }
 
