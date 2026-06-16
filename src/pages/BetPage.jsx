@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase'
 import { fmtOdds, fmtMoney, calcPayout } from '../lib/utils'
 import { useToast } from '../components/Toast'
 import './BetPage.css'
+const [myLeagueId, setMyLeagueId] = useState(null)
+
 
 const SPORTS = [
   { key: 'ALL',  label: 'All',  icon: '🏆' },
@@ -37,6 +39,7 @@ export default function BetPage({ picks, onPicksChange, myBalance, onLeagueLoad 
   const toast = useToast()
   const [games, setGames] = useState([])
   const [activeSport, setActiveSport] = useState('ALL')
+  const [myLeagueId, setMyLeagueId] = useState(null)
 
   useEffect(() => {
     supabase
@@ -48,6 +51,18 @@ export default function BetPage({ picks, onPicksChange, myBalance, onLeagueLoad 
     if (profile) loadMembership()
   }, [profile])
 
+  async function loadMembership() {
+  const { data } = await supabase
+    .from('league_members')
+    .select('league_id, balance')
+    .eq('user_id', profile.id)
+    .limit(1)
+    .single()
+  if (data) {
+    setMyLeagueId(data.league_id)
+    onLeagueLoad?.(data.league_id, data.balance)
+  }
+}
 
   const filteredGames = activeSport === 'ALL'
     ? games
@@ -126,6 +141,11 @@ export default function BetPage({ picks, onPicksChange, myBalance, onLeagueLoad 
       .eq('user_id', profile.id)
       .eq('league_id', myLeagueId)
 
+    setMyBalance(b => b - wager)
+    toast(isParlay
+      ? `${picks.length}-leg parlay placed! Potential: ${fmtMoney(payout)}`
+      : `Bet placed! ${fmtMoney(wager)} on ${picks[0].label}`
+    )
     onPicksChange([])
     setConfirming(false)
     setPlacing(false)
