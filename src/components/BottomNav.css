@@ -22,7 +22,7 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  text-decoration: none;
+  text-decoration: Bold;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   transition: color 0.15s;
