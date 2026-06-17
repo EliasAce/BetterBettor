@@ -61,7 +61,7 @@ input, select {
   padding: 11px 14px;
   font-size: 14px;
   color: var(--c-text);
-  font-family: Georgia, serif;
+  font-family: inherit;
   outline: none;
   width: 100%;
   transition: border-color 0.15s;
@@ -78,7 +78,7 @@ input::placeholder { color: var(--c-muted); }
   padding: 13px 20px;
   font-size: 14px;
   font-weight: 700;
-  font-family: Georgia, serif;
+  font-family: inherit;
   cursor: pointer;
   width: 100%;
   transition: all 0.15s;
@@ -96,7 +96,7 @@ input::placeholder { color: var(--c-muted); }
   padding: 11px 20px;
   font-size: 13px;
   font-weight: 600;
-  font-family: Georgia, serif;
+  font-family: inherit;
   cursor: pointer;
   width: 100%;
   transition: all 0.15s;
@@ -111,7 +111,7 @@ input::placeholder { color: var(--c-muted); }
   padding: 11px 20px;
   font-size: 13px;
   font-weight: 600;
-  font-family: Georgia, serif;
+  font-family: inherit;
   cursor: pointer;
   width: 100%;
   transition: all 0.15s;

@@ -29,7 +29,7 @@
   color: white;
   cursor: pointer;
   border: none;
-  font-family: Georgia, serif;
+  font-family: inherit;
 }
 
 

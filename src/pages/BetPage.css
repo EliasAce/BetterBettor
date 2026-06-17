@@ -20,7 +20,7 @@
   border-radius: 10px;
   padding: 8px 14px;
   cursor: pointer;
-  font-family: Georgia, serif;
+  font-family: inherit;
   flex-shrink: 0;
   transition: all 0.15s;
   min-width: 54px;
@@ -93,7 +93,7 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.15s;
-  font-family: Georgia, serif;
+  font-family: inherit;
 }
 .odd-btn:hover, .odd-btn.sel {
   background: rgba(59,130,246,0.12);
@@ -120,7 +120,7 @@
   align-items: center;
 }
 .slip-title { font-size: 13px; font-weight: 700; color: var(--c-accent2); }
-.slip-clear { font-size: 11px; color: var(--c-muted); cursor: pointer; background: none; border: none; font-family: Georgia, serif; }
+.slip-clear { font-size: 11px; color: var(--c-muted); cursor: pointer; background: none; border: none; font-family: inherit; }
 .slip-pick { padding: 10px 16px; border-bottom: 0.5px solid var(--c-border); }
 .slip-matchup { font-size: 11px; color: var(--c-muted); margin-bottom: 2px; }
 .slip-pick-name { font-size: 14px; font-weight: 600; }
@@ -146,7 +146,7 @@
   font-weight: 600;
   color: var(--c-muted);
   cursor: pointer;
-  font-family: Georgia, serif;
+  font-family: inherit;
   transition: all 0.15s;
 }
 .qa-btn:hover { color: var(--c-text); border-color: var(--c-border2); }
@@ -193,7 +193,7 @@
   font-size: 14px;
   color: var(--c-muted);
   cursor: pointer;
-  font-family: Georgia, serif;
+  font-family: inherit;
 }
 .modal-confirm {
   flex: 2;
@@ -205,7 +205,7 @@
   font-weight: 700;
   color: white;
   cursor: pointer;
-  font-family: Georgia, serif;
+  font-family: inherit;
   transition: background 0.15s;
 }
 .modal-confirm:hover { background: #2563eb; }
@@ -229,7 +229,7 @@
   cursor: pointer;
   padding: 2px 4px;
   margin-left: 8px;
-  font-family: Georgia, serif;
+  font-family: inherit;
 }
 .slip-remove:hover { color: var(--c-red); }
 

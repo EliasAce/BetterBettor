@@ -28,7 +28,7 @@
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  font-family: Georgia, serif;
+  font-family: inherit;
   transition: all 0.15s;
 }
 .copy-btn:active { background: rgba(139,92,246,0.3); }
