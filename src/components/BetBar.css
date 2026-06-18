@@ -7,13 +7,11 @@
   padding: 10px 16px;
   cursor: pointer;
   transition: background 0.15s;
-  position: fixed;
-  bottom: 56px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 420px;
+  position: sticky;
+  bottom: 0;
+  flex-shrink: 0;
   z-index: 100;
+  width: 100%;
 }
 .bet-bar:hover { background: #2563eb; }
 .bet-bar:active { background: #1d4ed8; }
