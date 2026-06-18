@@ -3,7 +3,7 @@
   border-top: 0.5px solid var(--c-border);
   background: var(--c-surface);
   position: sticky;
-  bottom: 5%;
+  bottom: 0;
   flex-shrink: 0;
   z-index: 50;
 }
