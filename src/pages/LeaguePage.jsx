@@ -88,8 +88,7 @@ export default function LeaguePage() {
     toast(`Copied "${league.invite_code}"!`)
   }
 
-  if (loading) return <div className="spinner-wrap"><div className="spinner" /></div>
-
+if (loading) return <div className="screen-content"><div className="spinner-wrap"><div className="spinner" /></div></div>
   return (
     <div className="screen-content">
       {league && (

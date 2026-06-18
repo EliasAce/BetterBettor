@@ -50,3 +50,4 @@
 .parlay-leg-result { font-weight: 700; }
 .parlay-leg-result.won { color: var(--c-green); }
 .parlay-leg-result.lost { color: var(--c-red); }
+

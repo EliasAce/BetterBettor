@@ -104,7 +104,8 @@ export default function MyBetsPage() {
     )
   }
 
-  if (loading) return <div className="spinner-wrap"><div className="spinner" /></div>
+if (loading) return <div className="screen-content"><div className="spinner-wrap"><div className="spinner" /></div></div>
+
 
   return (
     <div className="screen-content">
