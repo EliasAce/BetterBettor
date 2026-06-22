@@ -15,9 +15,9 @@
   background: none;
   border: none;
   border-top: 2px solid transparent;
-  border-bottom: 10px solid transparent;
+  border-bottom: 15px solid transparent;
   color: var(--c-muted);
-  font-size: 20px;
+  font-size: 10px;
   font-family: inherit;
   cursor: pointer;
   display: flex;
