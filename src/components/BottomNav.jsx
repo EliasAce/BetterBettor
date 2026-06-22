@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import './BottomNav.css'
 
 const tabs = [
-  { to: '/',        icon: '◈', label: 'Dashboard' },
+  { to: '/',        icon: '◈', label: 'Home' },
   { to: '/bet',     icon: '◎', label: 'Place Bet'  },
   { to: '/bets',    icon: '◷', label: 'My Bets'   },
   { to: '/league',  icon: '◉', label: 'League'     },
