@@ -11,10 +11,11 @@
 
 .nav-btn {
   flex: 1;
-  padding: 10px 8px 10px;
+  padding: 10px 8px;
   background: none;
   border: none;
   border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
   color: var(--c-muted);
   font-size: 10px;
   font-family: inherit;
