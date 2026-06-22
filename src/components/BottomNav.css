@@ -17,7 +17,7 @@
   border-top: 2px solid transparent;
   border-bottom: 10px solid transparent;
   color: var(--c-muted);
-  font-size: 10px;
+  font-size: 20px;
   font-family: inherit;
   cursor: pointer;
   display: flex;
